@@ -1,49 +1,30 @@
-%%Count the Pins
+%%Count the total number of pins
 clc
 clear all
 close all
 
 pins_rgb=imread('pins.jpg');
+pins_denoise = cat(3, medfilt2(pins_rgb(:,:,1), [5,5]),... 
+                        medfilt2(pins_rgb(:,:,2), [5,5]),... 
+                        medfilt2(pins_rgb(:,:,3), [5,5]));
 
-%%Extract channels
-pins_r = pins_rgb(:,:,1);
-pins_g = pins_rgb(:,:,2);
-pins_b = pins_rgb(:,:,3);
-%%Convert 0-255 to 0-1
-pins_d = im2double(pins_rgb);
-
-%%Normalized color values
-norm_r = pins_d(:,:,1) ./ (pins_d(:,:,2) + pins_d(:,:,1));
-norm_g = pins_d(:,:,2) ./ (pins_d(:,:,1) + pins_d(:,:,3));
-norm_b = pins_d(:,:,3) ./ (pins_d(:,:,1) + pins_d(:,:,2));
-norm_y = pins_d(:,:,1)*0.4+pins_d(:,:,2)*0.6 ./ sum(pins_d, 3);
-
-%%Classify pixels
-pr = colorFilter(norm_r, 1.2, 0.2);
-pg = colorFilter(norm_g, 0.3, 1.9);
-pb = colorFilter(norm_b, 0.1, 2);
-py = colorFilter(norm_y, 1.2, 0.09);
-
-red = 1-im2bw(pr, 0.1);
-green = im2bw(pg, 0.45);
-blue = 1-im2bw(pb, 0.15);
-yellow = 1-im2bw(py, 0.1);
-
-all = red+green+blue+yellow;
+pins_gray = rgb2gray(pins_denoise);
+pins_gray_d = im2double(pins_gray);
+pins_d = im2double(pins_denoise);
+pins_norm = min(pins_d, [], 3)+0.01 ./ pins_gray_d;
+pins_bw = ~im2bw(pins_norm, 0.4);
 
 figure('Name', 'Original'), imshow(pins_rgb);
-%figure('Name', 'All'), imshow(all);
-%%Red
-%figure('Name', 'PR'), imshow(pr);
-%figure('Name', 'Red'), imshow(red);
-%%Green
-%figure('Name', 'G norm'), imshow(norm_g);
-%figure('Name', 'PG'), imshow(pg);
-%figure('Name', 'Green'), imshow(green);
-%%Blue
-figure('Name', 'B norm'), imshow(norm_b);
-figure('Name', 'PB'), imshow(pb);
-figure('Name', 'Blue'), imshow(blue);
-%%Yellow
-%figure('Name', 'PY'), imshow(py);
-%figure('Name', 'PY'), imshow(yellow);
+figure('Name', 'Filter'), imshow(pins_denoise);
+figure('Name', 'Norm'), imshow(pins_norm);
+figure('Name', 'BW'), imshow(pins_bw);
+figure('Name', 'Pins'), imshow(pins_rgb);
+
+%%Draw pins
+props = regionprops(pins_bw, 'BoundingBox');
+num_pins = length(props);
+for k = 1 : num_pins
+  bb = props(k).BoundingBox;
+  rectangle('Position', [bb(1),bb(2),bb(3),bb(4)],'EdgeColor','r','LineWidth',2);
+end
+
