@@ -1,4 +1,5 @@
-%%Count the Pins
+%%Count the Pins 
+%%Experamental solution
 clc
 clear all
 close all
@@ -36,7 +37,7 @@ yellow = imdilate(yellow, strel('line',10,10));
 
 all = red+green+blue+yellow;
 
-%figure('Name', 'All'), imshow(all);
+figure('Name', 'All'), imshow(all);
 %%Red
 %figure('Name', 'PR'), imshow(pr);
 %figure('Name', 'Red'), imshow(red);
@@ -47,7 +48,7 @@ all = red+green+blue+yellow;
 %%Blue
 %figure('Name', 'B norm'), imshow(norm_b);
 %figure('Name', 'PB'), imshow(pb);
-figure('Name', 'Blue'), imshow(blue);
+%figure('Name', 'Blue'), imshow(blue);
 %%Yellow
 %figure('Name', 'PY'), imshow(py);
 %figure('Name', 'PY'), imshow(yellow);

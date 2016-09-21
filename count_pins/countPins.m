@@ -1,4 +1,4 @@
-%%Count the total number of pins
+%%Count the pins
 clc
 clear all
 close all
@@ -17,7 +17,7 @@ pins_bw = ~im2bw(pins_norm, 0.4);
 %figure('Name', 'Original'), imshow(pins_rgb);
 %figure('Name', 'Filter'), imshow(pins_denoise);
 %figure('Name', 'Norm'), imshow(pins_norm);
-%figure('Name', 'BW'), imshow(pins_bw);
+figure('Name', 'BW'), imshow(pins_bw);
 figure('Name', 'Pins'), imshow(pins_rgb);
 
 %%Draw pins
