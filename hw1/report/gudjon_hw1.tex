@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{mwe}
+\usepackage[]{mcode}
+%\usepackage{lingmacros}
+%\usepackage{tree-dvips}
+%\usepackage{blindtext}
+%\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\title{CMSC 426 - HW1}
+\author{Gudjon Einar Magnusson}
+
+\maketitle
+
+\section{}
+
+\subsection{My Region Props}
+
+\subsubsection{Area}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}
+    %% Count number of pixesl in blob
+    stats(count).Area = sum(sum(CurrBlob));
+\end{lstlisting}
+\end{minipage}
+
+\subsubsection{Centroid}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}
+    %% Find index of non-zero elements
+    [r, c] = find(CurrBlob);
+    n = size(r, 1);
+    %% Compute avarege of all non-zero pixel coordinates
+    stats(count).Centroid = [sum(c)/n, sum(r)/n];
+\end{lstlisting}
+\end{minipage}
+
+\subsubsection{Bounding Box}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}
+    %% Find index of non-zero elements
+    [r, c] = find(CurrBlob);
+    %% Find bounds and add padding
+    maxCol = max(c) + 0.5;
+    minCol = min(c) - 0.5;
+    maxRow = max(r) + 0.5;
+    minRow = min(r) - 0.5;
+    stats(count).BoundingBox = [minCol, minRow, maxCol-minCol, maxRow-minRow];
+\end{lstlisting}
+\end{minipage}
+
+
+\subsection{Fill Holes}
+
+
+\section{}
+
+\end{document}

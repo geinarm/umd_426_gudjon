@@ -1,4 +1,4 @@
-%%Count the Pins 
+%%Count the Pins
 %%Experamental solution
 clc
 clear all
