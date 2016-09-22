@@ -29,6 +29,33 @@ im = im2double(im);
 
 % WRITE YOUR CODE FOR ANISOTROPIC DIFFUSION USING BOTH THE CASES (SPECIFIED
 % BY THE ARGUMENT VARIANT) HERE
+switch Variant
+    case 1
+
+        impad = padarray(im, [1,1]);
+        for t = 1:NIter
+            for r = 2:size(im, 1)
+                for c = 2:size(im, 2)
+                    p = impad(r, c);
+                    gn = impad(r-1, c) - p;
+                    gs = impad(r+1, c) - p;
+                    ge = impad(r, c+1) - p;
+                    gw = impad(r, c-1) - p;
+                    
+                    cn = exp(-(abs(gn)/Kappa)^2);
+                    cs = exp(-(abs(gs)/Kappa)^2);
+                    ce = exp(-(abs(ge)/Kappa)^2);
+                    cw = exp(-(abs(gw)/Kappa)^2);
+                end
+            end
+        end
+        
+    case 2
+
+    otherwise
+        error('Wrong option given');
+end
+
 ADOut = im;
 end
 
