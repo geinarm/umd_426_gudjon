@@ -15,7 +15,7 @@
 
 \maketitle
 
-\section{}
+\section{Blobs}
 
 \subsection{My Region Props}
 
@@ -56,6 +56,33 @@
 \subsection{Fill Holes}
 
 
+\section{Gabor Filters}
+
 \section{}
+
+\section{}
+
+\section{}
+
+\section{Seam Carving}
+
+For the seam carving algorithm I use an energy function that is simply the gradient of each pixel. The gradient is calculated by applying the \textit{imgradient} function on a grayscale version of the image.
+
+Unfortunately my seam carving implementation is not very optimized, so to save some time reduced the size of the sample image by 50\%.
+In figure \ref{fig_carve} you can see the result of carving 50 horizontal and 100 vertical seams from the sample image. Overall the results are descent but unfortunately the person in the picture is cut in half, this is the most notable flaw. 
+
+
+\begin{figure}
+    \begin{subfigure}[t]{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{carving_original}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{carving_50_100}
+    \end{subfigure}
+    \caption{Before and after seam carving}
+    \label{fig_carve}
+\end{figure}
 
 \end{document}
