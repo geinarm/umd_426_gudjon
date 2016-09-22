@@ -33,10 +33,13 @@ switch Variant
     case 1
 
         impad = padarray(im, [1,1]);
+
         for t = 1:NIter
-            for r = 2:size(im, 1)
-                for c = 2:size(im, 2)
+            It = im;
+            for r = 2:size(impad, 1)-1
+                for c = 2:size(impad, 2)-1
                     p = impad(r, c);
+                
                     gn = impad(r-1, c) - p;
                     gs = impad(r+1, c) - p;
                     ge = impad(r, c+1) - p;
@@ -46,8 +49,12 @@ switch Variant
                     cs = exp(-(abs(gs)/Kappa)^2);
                     ce = exp(-(abs(ge)/Kappa)^2);
                     cw = exp(-(abs(gw)/Kappa)^2);
+
+                    f = (cn*gn + cs*gs + ce*ge + cw*gw);
+                    It(r-1,c-1) = It(r-1,c-1) + Lambda*f;
                 end
             end
+            im = It;
         end
         
     case 2
