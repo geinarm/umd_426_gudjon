@@ -30,62 +30,42 @@ im = im2double(im);
 switch option
     case 1
         % Write your code to make the image half here
-        oldSize = size(im);
-        newSize = size(im) * (1/2);
-        scaledim = zeros(newSize);
-
-        for j=1:newSize(2)
-            for i=1:newSize(1)
-                %% coordinates in the original image. Clamped to avoid out of bounds error
-                xf = min(max(j*2, 1), oldSize(2)-1);
-                yf = min(max(i*2, 1), oldSize(1)-1);
-                %% pixel indexes
-                x1 = floor(xf);
-                x2 = x1 +1;
-                y1 = floor(yf);
-                y2 = y1 +1;
-                %% Get 4 color values from original image
-                q11 = im(y1, x1);
-                q21 = im(y1, x2);
-                q12 = im(y2, x1);
-                q22 = im(y2, x2);
-                %% Interpolate to create one pixel in the new image
-                f = (q11*(x2-xf)*(y2-yf) + q21*(xf-x1)*(y2-yf) + q12*(x2-xf)*(yf-y1) + q22*(xf-x1)*(yf-y1)) / ((x2-x1) * (y2-y1));
-
-                scaledim(i, j) = f;
-            end
-        end
+        scaledim = myimresize(im, 0.5);
 
     case 2
         % Write your code to make the image double here
-        oldSize = size(im);
-        newSize = size(im) * 2;
-        scaledim = zeros(newSize);
-
-        for j=1:newSize(2)
-            for i=1:newSize(1)
-                %% coordinates in the original image. Clamped to avoid out of bounds error
-                xf = min(max(j*(1/2), 1), oldSize(2)-1);
-                yf = min(max(i*(1/2), 1), oldSize(1)-1);
-                %% pixel indexes
-                x1 = floor(xf);
-                x2 = x1 +1;
-                y1 = floor(yf);
-                y2 = y1 +1;
-                %% Get 4 color values from original image
-                q11 = im(y1, x1);
-                q21 = im(y1, x2);
-                q12 = im(y2, x1);
-                q22 = im(y2, x2);
-                %% Interpolate to create one pixel in the new image
-                f = (q11*(x2-xf)*(y2-yf) + q21*(xf-x1)*(y2-yf) + q12*(x2-xf)*(yf-y1) + q22*(xf-x1)*(yf-y1)) / ((x2-x1) * (y2-y1));
-
-                scaledim(i, j) = f;
-            end
-        end
+        scaledim = myimresize(im, 2);
 
     otherwise
         error('Wrong option given');
 end
 
+end
+
+function S = myimresize(I, scale)
+    oldSize = size(I);
+    newSize = size(I) * scale;
+    S = zeros(newSize);
+
+    for j=1:newSize(2)
+        for i=1:newSize(1)
+            %% coordinates in the original image. Clamped to avoid out of bounds error
+            xf = min(max(j*(1/scale), 1), oldSize(2)-1);
+            yf = min(max(i*(1/scale), 1), oldSize(1)-1);
+            %% pixel indexes
+            x1 = floor(xf);
+            x2 = x1 +1;
+            y1 = floor(yf);
+            y2 = y1 +1;
+            %% Get 4 color values from original image
+            q11 = I(y1, x1);
+            q21 = I(y1, x2);
+            q12 = I(y2, x1);
+            q22 = I(y2, x2);
+            %% Interpolate to create one pixel in the new image
+            f = (q11*(x2-xf)*(y2-yf) + q21*(xf-x1)*(y2-yf) + q12*(x2-xf)*(yf-y1) + q22*(xf-x1)*(yf-y1)) / ((x2-x1) * (y2-y1));
+
+            S(i, j) = f;
+        end
+    end
 end
