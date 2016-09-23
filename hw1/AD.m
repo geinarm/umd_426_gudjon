@@ -29,39 +29,41 @@ im = im2double(im);
 
 % WRITE YOUR CODE FOR ANISOTROPIC DIFFUSION USING BOTH THE CASES (SPECIFIED
 % BY THE ARGUMENT VARIANT) HERE
-switch Variant
-    case 1
 
-        impad = padarray(im, [1,1]);
+impad = padarray(im, [1,1]);
 
-        for t = 1:NIter
-            It = im;
-            for r = 2:size(impad, 1)-1
-                for c = 2:size(impad, 2)-1
-                    p = impad(r, c);
-                
-                    gn = impad(r-1, c) - p;
-                    gs = impad(r+1, c) - p;
-                    ge = impad(r, c+1) - p;
-                    gw = impad(r, c-1) - p;
-                    
-                    cn = exp(-(abs(gn)/Kappa)^2);
-                    cs = exp(-(abs(gs)/Kappa)^2);
-                    ce = exp(-(abs(ge)/Kappa)^2);
-                    cw = exp(-(abs(gw)/Kappa)^2);
+for t = 1:NIter
+    It = im;
+    for r = 2:size(impad, 1)-1
+        for c = 2:size(impad, 2)-1
+            p = impad(r, c);
 
-                    f = (cn*gn + cs*gs + ce*ge + cw*gw);
-                    It(r-1,c-1) = It(r-1,c-1) + Lambda*f;
-                end
+            gn = impad(r-1, c) - p;
+            gs = impad(r+1, c) - p;
+            ge = impad(r, c+1) - p;
+            gw = impad(r, c-1) - p;
+
+            if(Variant == 1)
+                cn = exp(-(abs(gn)/Kappa)^2);
+                cs = exp(-(abs(gs)/Kappa)^2);
+                ce = exp(-(abs(ge)/Kappa)^2);
+                cw = exp(-(abs(gw)/Kappa)^2);
+            elseif(Variant == 2)
+                cn = 1/(1+(abs(gn)/Kappa)^2);
+                cs = 1/(1+(abs(gs)/Kappa)^2);
+                ce = 1/(1+(abs(ge)/Kappa)^2);
+                cw = 1/(1+(abs(gw)/Kappa)^2);
+            else
+                error('Wrong option given');
             end
-            im = It;
-        end
-        
-    case 2
 
-    otherwise
-        error('Wrong option given');
+            f = (cn*gn + cs*gs + ce*ge + cw*gw);
+            It(r-1,c-1) = It(r-1,c-1) + Lambda*f;
+        end
+    end
+    im = It;
 end
+        
 
 ADOut = im;
 end

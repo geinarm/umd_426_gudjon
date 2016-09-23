@@ -17,10 +17,19 @@
 % PredLabel: Predicted face label scalar between 1 and 40 as this dataset has 40 subjects
 
 
-
-function PredLabel = PredFace(I, MeanFace, Model)
+function PredLabel = PredFace(I, MeanFace, Model, Basis)
 % Write code to evaulate current face against all training faces
 
-% CHANGE THIS!
-PredLabel = 0; % Return 0 as no class has number 0! 
+    I = I - MeanFace;
+    w = I'*Basis;
+
+    for i = 1:size(Model, 2)
+       Model(:, i) = w' - Model(:, i);
+    end
+
+    s = sum(Model.^2);
+    [~, idx] = min(s);
+    
+    PredLabel = ceil(idx/4);
+    
 end
