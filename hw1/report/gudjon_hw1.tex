@@ -52,17 +52,37 @@
 \end{lstlisting}
 \end{minipage}
 
-
-\subsection{Fill Holes}
-
-
 \section{Gabor Filters}
 
 \section{Resizing}
 
-\section{}
+Figure\ref{fig_scale} shows the sample image scaled up and down. The effect may be hard to see on paper, but I promise its amazing.
 
-\section{}
+\begin{figure}
+    \begin{subfigure}[t]{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{resize_double}
+        \caption{Scaled up 100\%}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{resize_half}
+        \caption{Scaled down 50\%}
+    \end{subfigure}
+    \label{fig_scale}
+\end{figure}
+
+
+\section{Anisotropic Filter}
+
+$K$ effectively defines how much contrast is needed to count as an edge. I high value of $K$ means causes a pixel to more likely to be affected by a neighboring pixel that is different, edges are more likely to blur. A low value of $K$ means that more things are counted as edges, lines that there previously not visible may be sharpened.
+
+$\lambda$ defines how much change is allowed per iteration. A low value means that more iterations are needed but the result is smoother. A high value means that each iteration can make big changes and that can cause noise and weird patterns. 
+
+\section{Eigen Faces}
+
+A bug in my implementation causes the recognition rate to be very low, only 2.5\%. In my case 13 seems to be a good value for $k$. Anything above 13 gives no improvement but below 13 the recognition rate quickly drops.
+
 
 \section{Seam Carving}
 
