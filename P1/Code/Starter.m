@@ -2,11 +2,14 @@
 % Written by: Nitin J. Sanket (nitinsan@terpmail.umd.edu)
 % PhD in CS Student at University of Maryland, College Park
 
-%% Generate Oriented Gaussian Filter Bank
 no = 16;
 ns = 2;
+showImg = false;
+
+%% Generate Oriented Gaussian Filter Bank
 GFbank = gfbank([3, 5], no);
 % Display all the Gaussian Filter Bank and save image as GaussianFB_ImageName.png,
+if showImg
 for r = 1:ns
     for c = 1:no
         subplot(ns,16,(r-1)*no+c), imshow(GFbank{r,c});
@@ -14,19 +17,40 @@ for r = 1:ns
 end
 % use command saveas
 saveas(gcf, '../Images/GaussianFB.png');
-
-%%For each test image
-nImages = 10;
-for i = 1:nImages
-I = imread(['../TestImages/', int2str(i), '.jpg']);
-imgName = int2str(i);
+end
 
 %% Generate Half-disk masks
+HDbank = hdbank([3, 5], no);
 % Display all the GHalf-disk masks and save image as HDMasks_ImageName.png,
+if showImg
+for r = 1:ns
+    for c = 1:no
+        subplot(ns,16,(r-1)*no+c), imshow(HDbank{r,c});
+    end
+end
+% use command saveas
+saveas(gcf, '../Images/HDMasks.png');
+end
+
 % use command saveas
 
+%%For each test image
+%nImages = 10;
+%for i = 1:nImages
+%I = imread(['../TestImages/', int2str(i), '.jpg']);
+%imgName = int2str(i);
+
+I = imread('../TestImages/1.jpg');
+I = rgb2gray(I);
+I = im2double(I);
 %% Generate Texton Map
+T = zeros(size(I, 1), size(I, 2), ns*no);
 % Filter image using oriented gaussian filter bank
+for k = 1:ns*no
+	K = GFbank{k};
+	Tk = imfilter(I, K);
+	T(:, :, k) = Tk;
+end
 
 % Generate texture id's using K-means clustering
 
@@ -74,5 +98,3 @@ imgName = int2str(i);
 
 % Display PbLite and save image as PbLite_ImageName.png
 % use command saveas
-
-end
