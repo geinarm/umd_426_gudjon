@@ -3,31 +3,23 @@
 % PhD in CS Student at University of Maryland, College Park
 
 %% Generate Oriented Gaussian Filter Bank
+no = 16;
+ns = 2;
+GFbank = gfbank([3, 5], no);
 % Display all the Gaussian Filter Bank and save image as GaussianFB_ImageName.png,
+for r = 1:ns
+    for c = 1:no
+        subplot(ns,16,(r-1)*no+c), imshow(GFbank{r,c});
+    end
+end
 % use command saveas
+saveas(gcf, '../Images/GaussianFB.png');
 
-k = 20;
-sigma = 1.0;
-
-G = zeros(k);
-dx = zeros(k);
-dy = zeros(k);
-cx = floor(k/2);
-cy = floor(k/2);
-
-%for r = 1:k
-%	for c = 1:k
-%		G(c,r) = exp(-((c-cx)^2+(r-cy)^2)/(2*sigma^2));
-%		dx(c,r) = -(c-cx)/sigma^2;
-%		dy(c,r) = -(r-cy)/sigma^2;
-%	end
-%end
-
-x = -5:0.1:5;
-mu = 0;
-%
-G = exp(-(x-mu).^2/(2 * sigma^2));
-dG = (mu-x) .* exp(-(x-mu).^2/(2 * sigma^2)) / sigma^2;
+%%For each test image
+nImages = 10;
+for i = 1:nImages
+I = imread(['../TestImages/', int2str(i), '.jpg']);
+imgName = int2str(i);
 
 %% Generate Half-disk masks
 % Display all the GHalf-disk masks and save image as HDMasks_ImageName.png,
@@ -83,5 +75,4 @@ dG = (mu-x) .* exp(-(x-mu).^2/(2 * sigma^2)) / sigma^2;
 % Display PbLite and save image as PbLite_ImageName.png
 % use command saveas
 
-
-
+end
