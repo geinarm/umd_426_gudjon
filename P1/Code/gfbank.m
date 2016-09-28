@@ -1,4 +1,4 @@
-function GFBank = gfbank( s, o )
+function GFBank = gfbank(k, s, o)
 %Returns a gaussian filter bank with s scales and o orientations
 
 numS = size(s, 2);
@@ -6,9 +6,8 @@ GFBank = cell(numS, o);
 
 for si = 1:numS
     for oi = 0:o-1
-        k = s(si);
-        sigma = k/3;
-        [x, y] = meshgrid(-k:1:k, -k:1:k);
+        sigma = s(si);
+        [x, y] = meshgrid(-k:k, -k:k);
 
         %G = exp(-((x.^2)+(y.^2))/(2 * sigma^2));
         Gx = x .* exp(-((x.^2)+(y.^2))/(2 * sigma^2)) / sigma^2;
