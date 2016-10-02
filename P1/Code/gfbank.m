@@ -1,21 +1,28 @@
-function GFBank = gfbank(k, s, o)
+function GFBank = gfbank(sigmas, rads)
 %Returns a gaussian filter bank with s scales and o orientations
 
-numS = size(s, 2);
-GFBank = cell(numS, o);
+num_s = numel(sigmas);
+num_r = numel(rads);
+GFBank = cell(num_s, num_r);
 
-for si = 1:numS
-    for oi = 0:o-1
-        sigma = s(si);
-        [x, y] = meshgrid(-k:k, -k:k);
+Sx = [-1 0 1 ; -2 0 2 ; -1 0 1];
+Sy = [1 2 1 ; 0 0 0 ; -1 -2 -1];
 
-        %G = exp(-((x.^2)+(y.^2))/(2 * sigma^2));
-        Gx = x .* exp(-((x.^2)+(y.^2))/(2 * sigma^2)) / sigma^2;
-        Gy = y .* exp(-((x.^2)+(y.^2))/(2 * sigma^2)) / sigma^2;
+for s = 1:num_s
+    sigma = sigmas(s);
+    k = ceil(sigma*3);
+    [x, y] = meshgrid(-k:k, -k:k);
 
-        theta = 2*pi/o * oi;
+    G = exp(-((x.^2)+(y.^2))/(2 * sigma^2));
+    Gx = imfilter(G, Sx);
+    Gy = imfilter(G, Sy);
+    %Gx = x .* exp(-((x.^2)+(y.^2))/(2 * sigma^2)) / sigma^2;
+    %Gy = y .* exp(-((x.^2)+(y.^2))/(2 * sigma^2)) / sigma^2;    
+    
+    for r = 1:num_r
+        theta = rads(r);
         Gtheta = cos(theta)*Gx + sin(theta)*Gy;
-        GFBank{si, oi+1} = Gtheta + 0.5;
+        GFBank{s, r} = Gtheta;
     end
 end
 
