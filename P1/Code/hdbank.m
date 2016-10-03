@@ -8,10 +8,11 @@ R = cell(num_r, num_d);
 
 for r = 1:num_r
     radius = rs(r);
-    k = ceil(radius+0.5);
+    k = ceil(radius);
     [x, y] = meshgrid(-k:k, -k:k);
     D = (x.^2+y.^2) < radius^2;
-    D(y>0) = 0;
+    %D(y>0) = 0;
+    D(ceil(radius)+1:end, :) = 0;
         
     for d = 1:num_d
         deg = degs(d);

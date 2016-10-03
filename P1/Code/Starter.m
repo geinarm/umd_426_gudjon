@@ -4,7 +4,7 @@
 
 %% Generate Oriented Gaussian Filter Bank
 gf_s = [1 2 4];
-gf_r = (2*pi/8).*(1:8);
+gf_r = (2*pi/16).*(1:16);
 GFbank = gfbank(gf_s, gf_r);
 % Display all the Gaussian Filter Bank and save image as GaussianFB_ImageName.png,
 plotIdx = 1;
@@ -22,8 +22,8 @@ saveas(gcf, '../Images/GaussianFB.png');
 clf;
 
 %% Generate Half-disk masks
-hd_radius = [2 5];
-hd_deg = [45:45:180];
+hd_radius = [2.8 4.8 6.8];
+hd_deg = (180/4) .* (1:4);
 [HDl, HDr] = hdbank(hd_radius, hd_deg);
 % Display all the GHalf-disk masks and save image as HDMasks_ImageName.png,
 showImg = true;
@@ -40,7 +40,7 @@ saveas(gcf, '../Images/HDMasks.png');
 clf;
 
 %%For each test image
-num_Img = 3;
+num_Img = 10;
 for i = 1:num_Img
     imgName = int2str(i);
     disp(['Image ', imgName]);
@@ -73,7 +73,7 @@ for i = 1:num_Img
     
     % Generate texture id's using K-means clustering
     P = reshape(T, width*height, numel(GFbank));
-    [Idx, ~] = kmeans(P, 64);
+    [Idx, ~] = kmeans(P, 8);
     texton_map = reshape(Idx, height, width);
 
     % Display texton map and save image as TextonMap_ImageName.png,
@@ -86,16 +86,16 @@ for i = 1:num_Img
     TG = chiDist(HDl, HDr, 1:num_bins, texton_map);
 
     % Display tg and save image as tg_ImageName.png,
-    TG = mean(TG, 3);
+    TG = max(TG, [], 3);
     TG_norm = TG ./ max(TG(:));
     imshow(TG_norm);
     saveas(gcf, ['../Images/tg/',imgName,'.png']);
 
     %% Generate Brightness Map
     % Perform brightness binning 
-    num_bins = 15;
+    num_bins = 8;
     B = ceil(Lab_norm(:,:,1) * num_bins);
-
+    
     % Display brightness map and save image as BrightnessMap_ImageName.png,
     imagesc(B), colormap(jet);
     saveas(gcf, ['../Images/BrightnessMap/',imgName,'.png']);
@@ -105,19 +105,16 @@ for i = 1:num_Img
     BG = chiDist(HDl, HDr, 1:num_bins, B);
 
     % Display bg and save image as bg_ImageName.png,
-    BG = mean(BG, 3);
-    BG_norm = BG ./ max(max(BG));
+    BG = max(BG, [], 3);
+    BG_norm = BG ./ range(BG(:));
     imshow(BG_norm);
     saveas(gcf, ['../Images/bg/',imgName,'.png']);
 
     %% Generate Color Map
     % Perform color binning 
-    num_bins = 15;
-    %C1 = ceil(Lab_norm(:,:,2) * num_bins);
-    %C2 = ceil(Lab_norm(:,:,3) * num_bins);
-    
+    num_bins = 8;
     %%Color Map by running kmeans on color space
-    P = reshape(Hsv, width*height, 3);
+    P = reshape(Lab(:,:, 2:3), width*height, 2);
     [Idx, ~] = kmeans(P, num_bins);
     color_map = reshape(Idx, height, width);
     imagesc(color_map), colormap(jet);
@@ -126,12 +123,10 @@ for i = 1:num_Img
     %% Generate Color Gradient (CG)
     % Perform Chi-square calculation on Color Map
     CG = chiDist(HDl, HDr, 1:num_bins, color_map);
-    %CG1 = chiDist(HDl, HDr, 1:num_bins, C1);
-    %CG2 = chiDist(HDl, HDr, 1:num_bins, C2);
 
     % Display cg and save image as cg_ImageName.png,
-    CG = mean(CG, 3);
-    CG_norm = CG ./ max(max(CG));
+    CG = max(CG, [], 3);
+    CG_norm = CG ./ range(CG(:));
     imshow(CG_norm);
     saveas(gcf, ['../Images/cg/',imgName,'.png']);
 
@@ -157,14 +152,15 @@ for i = 1:num_Img
 
 
     %% Combine responses to get pb-lite output
-    MyPB = (TG+BG+CG);
+    %MyPB  = (TG + BG + CG + gauss_map).*(CannyPb + SobelPb);
+    MyPB  = (TG + BG + CG);
     MyPB = MyPB ./ range(MyPB(:));
-    %PbLite = PbLite ./ max(max(PbLite));
+    PbLite = MyPB .* (CannyPb + SobelPb);
 
     % Display PbLite and save image as PbLite_ImageName.png
     imshow(MyPB);
     saveas(gcf, ['../Images/PbLite/',imgName,'.png']);
-    
-    imwrite(im2bw(MyPB, 0.5),['../data/mypb/',imgName,'.png']);
+    imwrite(MyPB ,['../data/mypb/',imgName,'.png']);
+    imwrite(PbLite ,['../data/PbLite/',imgName,'.png']);
 
 end
