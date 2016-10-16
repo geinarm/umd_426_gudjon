@@ -1,7 +1,7 @@
 I = im2double(imread('../Images/Set1/1.jpg'));
 %G = rgb2gray(I);
 
-f = 500;
+f = 300;
 
 [height, width, ~] = size(I);
 xc = width/2;
