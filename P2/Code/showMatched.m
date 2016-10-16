@@ -1,4 +1,4 @@
-function hImage = showMatchedFeatures(I1, I2, matchedPoints1, matchedPoints2, varargin)
+function hImage = showMatched(I1, I2, matchedPoints1, matchedPoints2, varargin)
 %showMatchedFeatures Display corresponding feature points.
 %  showMatchedFeatures(I1, I2, matchedPoints1, matchedPoints2) displays a
 %  falsecolor overlay of images I1 and I2, with a color-coded plot of the
