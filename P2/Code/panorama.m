@@ -1,9 +1,9 @@
 
-I = readImages('../Images/Set2/');
+I = readImages('../Images/CustomSet1/');
 
 %% Add cylindrical projection
 %for i = 1:numel(I)
-%   I{i} = cylindrical(I{i}, 500); 
+%   I{i} = cylindrical(I{i}, 600); 
 %end
 
 %% Generate grayscale verison used to find corners

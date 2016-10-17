@@ -2,7 +2,7 @@ function [ P1, P2 ] = matchFeatures( F1, D1, F2, D2 )
 
     num_points_1 = size(F1, 1);
     num_points_2 = size(F2, 1);
-    threshold = 0.3;
+    threshold = 0.2;
 
     P1 = [];
     P2 = [];

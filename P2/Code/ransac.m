@@ -1,10 +1,10 @@
-function [ H ] = ransac( M1, M2, itter )
+function [ H ] = ransac( M1, M2, iter )
 
     H_best = [];
     inline_best = [];
     num_inline_best = 0;
 
-    for i = 1:itter
+    for i = 1:iter
         % 4 random point pairs
         r = randperm(size(M1, 1));
         P1 = M1(r(1:4), :);
