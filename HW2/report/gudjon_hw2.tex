@@ -1,0 +1,56 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{mwe}
+\usepackage[]{mcode}
+%\usepackage{lingmacros}
+%\usepackage{tree-dvips}
+%\usepackage{blindtext}
+%\usepackage[utf8]{inputenc}
+
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+
+\begin{document}
+
+\title{CMSC 426 - HW2}
+\author{Gudjon Einar Magnusson}
+
+\maketitle
+
+%% 1
+%Why is a filter bank used instead of a single filter? Explain this in as much detail as you can. 
+%Feel free to use synthetic or real world examples of images or just conceptual examples if you want. 10 Pts
+\section{}
+
+In some cases a single filter is fine, to do Gaussian blur all you need is a single filter. A filter bank is needed if you want to capture information that is dependent on orientation, scale or some other variable. To find edges you might want to have a filter bank that contains filters with different orientations. This makes it easier to find the edge and it gives you some information about its direction.
+
+You might also want to use a group of seemingly unrelated filters if each of them gives some interesting feature. The resulting feature vector you get at each pixel might be useful for clustering, classification or some other procedure.
+
+%% 2
+\section{}
+
+\subsection{} %a
+If its rows and columns are linearly dependent it is separable. (rank 1)
+
+
+\subsection{} %b
+$m \times n \times p \times q$ vs $m \times n ( p + q)$
+
+\subsection{} %c
+
+\subsection{} %d
+
+%% 3
+\section{}
+
+%% 4
+\section{}
+
+%% 5
+\section{}
+
+%% 6
+\section{}
+
+
+\end{document}

@@ -1,0 +1,3 @@
+[submodule "P3/Code/matconvnet"]
+	path = P3/Code/matconvnet
+	url = https://github.com/vlfeat/matconvnet.git

@@ -16,9 +16,11 @@
 \maketitle
 
 \section{Capture Images} %1
-For this project I used 5 sets of images to test my code.
+For this project I used 5 sets of images, with 3 to 8 images in each set, to test my code. All the images are shown in figure \ref{fig_set1}.
 
 \begin{figure}[t!]
+    \centering
+
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=\linewidth]{../Images/Set1/1}
@@ -84,20 +86,39 @@ For this project I used 5 sets of images to test my code.
 
     \vskip\baselineskip
 
-    \begin{subfigure}[t]{0.3\textwidth}
+    \begin{subfigure}[t]{0.22\textwidth}
         \centering
         \includegraphics[width=\linewidth]{../Images/CustomSet1/1}
     \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
+    \begin{subfigure}[t]{0.22\textwidth}
         \centering
         \includegraphics[width=\linewidth]{../Images/CustomSet1/2}
     \end{subfigure}
-        \begin{subfigure}[t]{0.3\textwidth}
+    \begin{subfigure}[t]{0.22\textwidth}
         \centering
         \includegraphics[width=\linewidth]{../Images/CustomSet1/3}
     \end{subfigure}
+    \begin{subfigure}[t]{0.22\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../Images/CustomSet1/4}
+    \end{subfigure}
 
-    \caption{Image set}
+    \vskip\baselineskip
+
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../Images/CustomSet2/1}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../Images/CustomSet2/2}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../Images/CustomSet2/3}
+    \end{subfigure}
+
+    \caption{5 image sets used for testing}
     \label{fig_set1}
 \end{figure}
 
@@ -182,11 +203,52 @@ Lower values of $f$ increase the amount of warping in the image, kinda like lowe
 
 The simplest method I could come up with to combine the image was to pick the maximum value of each pixel. This produces a fairly good result for the landscape image, except for a slight difference in brightness. For scenes closer to the camera there is a big problem, objects that move or don't match perfectly show up as ghosts. Figure \ref{fig_ghost} shows an example of the ghosting effect.
 
+I'm currently implementing a technique that borrows from my seam carving implementation to find a low energy seam through the image intersection and uses that to get a better merging line. That might fix the issue of hard lines passing through objects. It would not fix the brightness issue though. I'll try to get to that.
+
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.5\linewidth]{img/set1_ghost2}
-    \caption{The problem with merging images}
+    \caption{The problem with naive merging}
     \label{fig_ghost}
+\end{figure}
+
+\section{Results}
+
+Turns out images very close to the camera are very difficult to get right.
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\linewidth]{img/set1_panorama2}
+    \caption{Result from set 1}
+    \label{fig_result_1}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\linewidth]{img/set2_panorama3}
+    \caption{Result from set 2}
+    \label{fig_result_2}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\linewidth]{img/set3_panorama1}
+    \caption{Result from set 3}
+    \label{fig_result_3}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\linewidth]{img/set_c1_pan2}
+    \caption{Result from custom set 1}
+    \label{fig_result_c1}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\linewidth]{img/set_c2_pan1}
+    \caption{Result from custom set 2}
+    \label{fig_result_c2}
 \end{figure}
 
 \end{document}

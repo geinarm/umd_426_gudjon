@@ -1,0 +1,30 @@
+## First of all you save you results to '/home/<your_user>/BoVW/results.txt' on the CMSC426 server
+## NOTE: Your submission will be evaluated once in 3 hours, i.e., 3hrs from your previous submission. So plan your submissions accordingly.
+
+
+### You can write any comments starting with '#', 
+###
+## You can also leave blank lines
+
+#Makesure you have a 'Name' section for your Team Name (here the team is only you.. :P)
+Name: AsYouLikeIt
+
+#Make sure you now have a line just saying 'Labels:'
+
+Labels:
+
+#From now on you will only have numbers i.e., labels of the testing images in the same order as the images are given.
+
+#NOTE: Make sure you mention Team Name before Labels
+
+1
+
+2
+3
+4
+5
+7
+3
+5
+7
+4
