@@ -1,5 +1,5 @@
 
-I = readImages('../Images/CustomSet1/');
+I = readImages('../Images/CustomSet2/');
 
 %% Add cylindrical projection
 %for i = 1:numel(I)
