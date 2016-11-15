@@ -12,7 +12,8 @@ function c = clusterNearestNeighbor( C, M )
 
 	for i = 1:m
 		p = M(i, :);
-		D = sum((C-p).^2, 2);
+        D = C-p(ones(n,1),:);
+		D = sum(D.^2, 2);
 		[~, idx] = min(D);
 		c(i) = idx;
 	end
