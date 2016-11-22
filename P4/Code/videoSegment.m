@@ -6,14 +6,14 @@ if (~exist('Imgs', 'var'))
 end
 m = numel(Imgs);
 
-F = cell(1,m);
+F = cell(1,m-1);
 for i = 2:m
     G1 = im2double(rgb2gray(Imgs{i-1}));
     G2 = im2double(rgb2gray(Imgs{i}));
-    %diff = abs(G1 - G2);
-    uv = estimate_flow_interface(Imgs{2}, Imgs{3}, 'hs');
-    uv = uv./range(uv(:));
+    uv = abs(G1 - G2);
+    %uv = estimate_flow_interface(Imgs{2}, Imgs{3}, 'hs');
+    %uv = uv./range(uv(:));
     F{i-1} = uv(:,:,1);
 end
 
-%makeVideo(F, 'out.avi', 30);
+makeVideo(F, 'out.avi', 30);
