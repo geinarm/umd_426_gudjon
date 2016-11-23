@@ -1,27 +1,25 @@
-function [ mask ] = refineMask( I, M )
- 
-    [height, width] = size(M);
+function [ M ] = window2mask( I, S, W )
 
-    Windows = getWindows(I, M, 20, 10);
+    [height, width] = size(S);
     maskIn = zeros(height, width);
     maskOut = zeros(height, width);
-    
-    for i = 1:numel(Windows)
-        w = Windows{i};
-        %w.Draw();
+
+    for i = 1:numel(W)
+        w = W{i};
         
-        %ratio of FG pixels to total pixels
+        w.RGB = I(w.YMin:w.YMax, w.XMin:w.XMax, :);
+        w.Mask = S(w.YMin:w.YMax, w.XMin:w.XMax);
+        w.LAB = rgb2lab(w.RGB);
+        
         num_fg = sum(w.Mask(:));
         num_bg = sum(~w.Mask(:));
         sample_ratio = num_fg/(num_bg+num_fg);
-        %imshow([rgb2gray(w.RGB), w.Mask]);
-        %pause
         
-        if(numel(w.FG) == 0)
+        if(num_fg == 0)
             continue;
         end
-        if(numel(w.BG) == 0)
-           maskIn(w.YMin:w.YMax, w.XMin:w.XMax) = ones(w.Rect(4), w.Rect(3))*max(maskIn(:));
+        if(num_bg == 0)
+           maskIn(w.YMin:w.YMax, w.XMin:w.XMax) = ones(w.Rect(4), w.Rect(3));
            continue;
         end
         if sample_ratio > 0.9 || sample_ratio < 0.1
@@ -38,22 +36,17 @@ function [ mask ] = refineMask( I, M )
     
     maskIn = mat2gray(maskIn);
     maskOut = mat2gray(maskOut);
-    imshow([maskIn, maskOut]);
-    pause
-    
-    shape = double(M);
+    shape = double(S);
     shape = imgaussfilt(shape, 10);
 
-    mask = maskIn .* (1-maskOut) .* shape;
-    imshow(mask);
+    M = maskIn .* (1-maskOut) .* shape;
+
 end
 
 %% Generate FG and BG propability mask for a given window
 function [ pfg, pbg ] = windowMask( W )
-    muIn = mean(W.FG);
-    muOut = mean(W.BG);
-    %SIn = cov(w.FG);
-    %SOut = cov(w.BG);
+    muIn = W.FG_Centroid; % mean(W.FG);
+    muOut = W.BG_Centroid; % mean(W.BG);
 
     %Classify FG / BG
     Pixels = reshape(W.LAB, numel(W.LAB)/3, 3);
