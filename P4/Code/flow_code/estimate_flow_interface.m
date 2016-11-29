@@ -78,7 +78,7 @@ end;
 if ~isempty(ope.color_images)    
     if size(im1, 3) > 1        
         % Convert to Lab space       
-        im1 = RGB2Lab(im1);          
+        im1 = rgb2lab(im1);          
         for j = 1:size(im1, 3);
             im1(:,:,j) = scale_image(im1(:,:,j), 0, 255);
         end;        
