@@ -17,10 +17,12 @@ function PC = clusterLocalEncoding( C, M )
         
         for j = 1:n
             c = C(j,:);
-            D(j) = sum((c-p).^2, 2);
+            D(j) = norm(c-p);
         end
         sum_d = sum(D);
-        PC(i, :) = 1 - D./sum_d;
+        ps = 1-(D./sum_d);
+        ps = ps./sum(ps);
+        PC(i, :) = ps;
 	end
 
 end

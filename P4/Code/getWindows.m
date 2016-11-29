@@ -22,9 +22,12 @@ for x = 1:wx
         w.YMin = max(1, py-ol);
         w.YMax = min(py+ws+ol-1, height);
         w.Rect = [w.XMin, w.YMin, w.XMax-w.XMin+1, w.YMax-w.YMin+1];
+        w.CenterX = (w.XMin+w.XMax)/2;
+        w.CenterY = (w.YMin+w.YMax)/2;
         
         w.RGB = I(w.YMin:w.YMax, w.XMin:w.XMax, :);
         w.Mask = M(w.YMin:w.YMax, w.XMin:w.XMax);
+        w.Sigma = 1;
         
         %Get FG/BG pixels
         w.LAB = rgb2lab(w.RGB);
@@ -37,8 +40,8 @@ for x = 1:wx
         w.FG_Centroid = mean(FG);
         w.BG_Centroid = mean(BG);
         
-        w.Draw = @(c) rectangle('Position', w.Rect, 'EdgeColor', c);
-        w.Draw = @() rectangle('Position', w.Rect, 'EdgeColor', 'blue');
+        w.DrawColor = @(c) rectangle('Position', [w.XMin, w.YMin, w.XMax-w.XMin, w.YMax-w.YMin], 'EdgeColor', c);
+        w.Draw = @() rectangle('Position', [w.XMin, w.YMin, w.XMax-w.XMin, w.YMax-w.YMin], 'EdgeColor', 'blue');
         
         W{y, x} = w;
    end

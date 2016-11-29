@@ -1,6 +1,6 @@
 function [ BB ] = markBoundingBox( I, M )
 
-bb = (regionprops(M,'BoundingBox'));
+bb = (regionprops(uint8(M),'BoundingBox'));
 bb = bb.BoundingBox;
 minX = floor(bb(1));
 maxX = ceil(minX + bb(3));
@@ -13,7 +13,7 @@ bw(minY:maxY, maxX) = true;
 bw(minY, minX:maxX) = true;
 bw(maxY, minX:maxX) = true;
 
-se = strel('disk',1);
+se = strel('square',1);
 bw = imdilate(bw ,se);
 
 red = I(:,:,1);
