@@ -13,6 +13,7 @@ function [ Mask ] = getBoundry( I, M )
     [height, width, ~] = size(I_trim);
     
     LAB = rgb2lab(I_trim);
+    Gray = rgb2gray(LAB);
     Pixels = reshape(LAB, numel(LAB)/3, 3);
     N = zeros(size(Pixels,1), 1);
     for i = 1:size(Pixels,1)
@@ -26,28 +27,30 @@ function [ Mask ] = getBoundry( I, M )
     Iy = imfilter(Norm, hy, 'replicate');
     Ix = imfilter(Norm, hx, 'replicate');
     gradmag = sqrt(Ix.^2 + Iy.^2);
-    %imshow(gradmag,[])
-    %pause
     
-    se = strel('disk', 1);
-    Io = imopen(Norm, se);
-    %imshow(Io)
-    %pause
-    
-    Iy = imfilter(Io, hy, 'replicate');
-    Ix = imfilter(Io, hx, 'replicate');
+    lap = fspecial('laplacian');
+    Iy = imfilter(Gray, lap, 'replicate');
+    Ix = imfilter(Gray, lap', 'replicate');
     gradmag2 = sqrt(Ix.^2 + Iy.^2);
     
     %imshow(gradmag2,[])
     %pause
     
-    mblur = imgaussfilt(double(M_trim), 5);
-    B = mat2gray(gradmag+gradmag2);
-    B = mblur.*B + mblur;
+    mblur = imgaussfilt(double(M_trim), 10);
+    B = mat2gray(gradmag + gradmag2);
+    B = M_trim+B*2;
+    
+    se = strel('disk', 3);
+    Be = imerode(B, se);
+    B = imreconstruct(Be, B);
+    B = imfill(B);
+    B = imopen(B, se);
+    %B = imgaussfilt(B, 1);
+    %B = imerode(B, se);
     B = mat2gray(B);
     Mask(YMin:YMax, XMin:XMax) = B;
     
-    
+    %{
     num_bins = 7;
     [Idx, ~] = kmeans(Pixels, num_bins);
     Clustered = reshape(Idx, height, width);
@@ -69,6 +72,7 @@ function [ Mask ] = getBoundry( I, M )
     B = mblur.*TG + mblur;
     B = mat2gray(B);
     Mask(YMin:YMax, XMin:XMax) = B;
+    %}
     
 
 end

@@ -33,7 +33,7 @@ P2(:,1) = P2(:,1) + XMin;
 P2(:,2) = P2(:,2) + YMin;
 
 [Pm1, Pm2] = matchFeatures(P1, D1, P2, D2);
-V = Pm1 - Pm2;
+V = Pm2 - Pm1;
 D = sum(V.^2, 2);
 
 filt = D<50;

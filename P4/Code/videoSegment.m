@@ -1,8 +1,8 @@
 
 % Load images if they have not been loaded yet
-img_set = 1;
-window_size = 15;
-window_overlap = 7;
+img_set = 3;
+window_size = 24;
+window_overlap = ceil(window_size/2);
 
 if (~exist('Imgs', 'var'))
     Imgs = readImages(['../Data/Frames', int2str(img_set), '/']);
@@ -24,23 +24,37 @@ for i = 2:m
     disp(i);
     I_i = im2double(Imgs{i});
     
+    %{
+    imshow(I_i); hold on;
+    for i = 1:numel(windows)
+       w = windows{i};
+       rect = [w.XMin, w.YMin, w.XMax-w.XMin, w.YMax-w.YMin];
+       rectangle('Position', rect, 'EdgeColor', 'red');       
+    end
+    pause
+    hold off;
+    %}
+    
     [P, V] = trackFeatures(I_i, I_last, M);
-    windows = propogateWindows(I_i, windows, P, V);
-    [Mw, Ms] = window2mask(I_i, M, windows);
+    %windows = propogateWindows(I_i, windows, P, V);
+    [Mc, Ms] = window2mask(I_i, M, windows);
     %Ms = imgaussfilt(double(M), 1);
     Mb = getBoundry(I_i, M>0);
+ 
+    imshow([Mc, Mb, Ms]);
+    pause
     
-    %imshow([Mw, Mb, Ms]);
-    %pause
-    
-    M_i = Mw.*Mb;
+    M_i = Mc.*Mb;
     M_i = imgaussfilt(M_i, 0.5);
-    M = (M_i>0.075);
+    M = (M_i>0.05);
     M = bwareaopen(M, 50);
+    M = imfill(M,'holes');
     
-    %imshow([M_i, M]);
+    imshow([M_i, M]);
+    pause
+    
+    %imshow(markBoundry(I_i, M));
     %pause
-    
     windows = getWindows(I_i, M, window_size, window_overlap);
     I_last = I_i;
     
@@ -49,7 +63,7 @@ for i = 2:m
     F{i} = im2double(frame);
     
     imshow(frame);
-    pause
+    %pause
 end
 
 makeVideo(F, 'out.avi', 30);
