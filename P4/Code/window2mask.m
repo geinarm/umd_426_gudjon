@@ -20,17 +20,17 @@ function [ M, S ] = window2mask( I, S, W )
         maskOut_curr = maskOut(w.YMin:w.YMax, w.XMin:w.XMax);
         
         if sample_ratio > 0.9 %Mostly FG
-           maskIn(w.YMin:w.YMax, w.XMin:w.XMax) = ones(w.Rect(4), w.Rect(3));
-           shape = zeros(height, width);
-           shape(w.YMin:w.YMax, w.XMin:w.XMax) = w.Mask;
-           maskShape = maskShape + shape;
+           %maskIn(w.YMin:w.YMax, w.XMin:w.XMax) = ones(w.Rect(4), w.Rect(3));
+           %shape = zeros(height, width);
+           %shape(w.YMin:w.YMax, w.XMin:w.XMax) = w.Mask;
+           %maskShape = maskShape + shape;
            continue;
         end
         if sample_ratio < 0.1 %Mostly BG
-           maskIn(w.YMin:w.YMax, w.XMin:w.XMax) = max(maskIn_curr, w.Mask*0.1);
-           shape = zeros(height, width);
-           shape(w.YMin:w.YMax, w.XMin:w.XMax) = w.Mask;
-           maskShape = maskShape + shape;
+           %maskIn(w.YMin:w.YMax, w.XMin:w.XMax) = max(maskIn_curr, w.Mask*0.1);
+           %shape = zeros(height, width);
+           %shape(w.YMin:w.YMax, w.XMin:w.XMax) = w.Mask;
+           %maskShape = maskShape + shape;
            continue;
         end        
         
